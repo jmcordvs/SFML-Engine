@@ -1,15 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-
-#include <SFML\Graphics.hpp>
-#include <SFML\Window.hpp>
-#include <SFML\System.hpp>
-#include <SFML\Audio.hpp>
-#include <SFML\Network.hpp>
+#include "State.h"
 
 class Game
 {
@@ -21,7 +13,7 @@ private:
 
 	float flDeltaTime;
 	
-	// Initialization
+	//Call the window initialization function
 	void fnInitializeWindow();
 
 

@@ -1,4 +1,7 @@
+#include "State.h"
 #include "Game.h"
+
+#include <Windows.h>
 
 // Static functions
 
@@ -8,7 +11,25 @@
 
 void Game::fnInitializeWindow()
 {
-	this->sfWindow = new sf::RenderWindow(sf::VideoMode(800, 400), "SFML works!");
+	std::ifstream iFileStream("Config/window.ini");
+	std::string sTitle = "None";
+	sf::VideoMode sfWindowBounds(800, 600);
+
+	unsigned uFrameRateLimit = 120;
+
+	bool bVerticalSyncEnabled = false;
+
+	if (iFileStream.is_open())
+	{
+		std::getline(iFileStream, sTitle);
+		iFileStream >> sfWindowBounds.width, sfWindowBounds.height;
+		iFileStream >> uFrameRateLimit;
+		iFileStream >> bVerticalSyncEnabled;
+	}
+
+	this->sfWindow = new sf::RenderWindow(sfWindowBounds, sTitle);
+	this->sfWindow->setFramerateLimit(uFrameRateLimit);
+	this->sfWindow->setVerticalSyncEnabled(bVerticalSyncEnabled);
 
 	// Set an image icon for the window
 	sf::Image imgIcon;
@@ -37,7 +58,7 @@ Game::~Game()
 void Game::fnUpdateDeltaTime()
 {
 	//Updates the flDeltaTime variable with the time it takes to update and render 1 frame
-	this->flDeltaTime = this->deltaTimeClock.getElapsedTime().asSeconds();
+	this->flDeltaTime = this->deltaTimeClock.restart().asSeconds();
 }
 
 void Game::fnUpdateSFMLEvents()
@@ -52,6 +73,13 @@ void Game::fnUpdateSFMLEvents()
 void Game::fnUpdate()
 {
 	this->fnUpdateSFMLEvents();
+
+	int iSum = 0;
+
+	for (size_t i = 0; i < 1000000000; i++)
+	{
+		iSum += i;
+	}
 }
 
 void Game::fnRender()
@@ -61,9 +89,6 @@ void Game::fnRender()
 	this->sfWindow->display();
 
 	this->sfWindow->requestFocus();
-
-	//Set the title of the window, visible in the title bar
-	this->sfWindow->setTitle("SFML Engine v0.1");
 }
 
 void Game::fnRun()
